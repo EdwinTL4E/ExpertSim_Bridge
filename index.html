@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExpertSim Bridge</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-soft: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-strong: #0ea5e9;
+      --success: #22c55e;
+      --border: #334155;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 45%, #020617 100%);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 48px 20px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .block {
+      background: linear-gradient(180deg, rgba(31, 41, 55, 0.95), rgba(17, 24, 39, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 20px 50px var(--shadow);
+    }
+
+    .title-block {
+      text-align: center;
+      padding: 38px 28px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      padding-bottom: 6px;
+      font-size: clamp(2rem, 5vw, 3.3rem);
+      line-height: 1.08;
+      overflow: visible;
+      letter-spacing: -0.04em;
+      color: #f8fafc;
+      background: linear-gradient(90deg, #f8fafc 0%, #38bdf8 55%, #0ea5e9 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      max-width: 720px;
+      color: #e2e8f0;
+      font-size: 1.16rem;
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.35rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .prompt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 18px;
+      color: #001018;
+      background: var(--accent);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      background: var(--accent-strong);
+    }
+
+    button.copied {
+      background: var(--success);
+      color: #052e16;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 560px;
+      resize: vertical;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #020617;
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.96rem;
+    }
+
+    .section-intro {
+      margin-bottom: 20px;
+    }
+
+    .followup-block h2,
+    .escalation-block h2 {
+      margin-bottom: 10px;
+    }
+
+    .accordion {
+      display: grid;
+      gap: 12px;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(2, 6, 23, 0.38);
+      overflow: hidden;
+    }
+
+    .accordion-item summary {
+      cursor: pointer;
+      padding: 16px 18px;
+      color: var(--accent);
+      font-weight: 600;
+      list-style: none;
+      letter-spacing: 0.015em;
+    }
+
+    .accordion-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .accordion-item summary::after {
+      content: "+";
+      float: right;
+      color: var(--accent);
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .accordion-item[open] summary::after {
+      content: "−";
+    }
+
+    .accordion-item summary:hover {
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .accordion-content {
+      display: grid;
+      gap: 12px;
+      padding: 0 14px 14px;
+    }
+
+    .prompt-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid rgba(51, 65, 85, 0.75);
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.72);
+    }
+
+    .prompt-item p {
+      margin: 0;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .prompt-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fbbf24;
+      font-size: 0.96rem;
+      letter-spacing: 0.015em;
+    }
+
+    .transfer-intro {
+      margin-bottom: 18px;
+      color: var(--muted);
+    }
+
+    .prompt-hint {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      letter-spacing: 0.01em;
+    }
+
+    .escalation-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .escalation-card {
+      border-color: rgba(251, 191, 36, 0.42);
+      border-left: 4px solid #fbbf24;
+      background: rgba(30, 41, 59, 0.72);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 24px 12px;
+      }
+
+      .block {
+        padding: 22px;
+        border-radius: 18px;
+      }
+
+      .prompt-header,
+      .prompt-item {
+        align-items: stretch;
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+
+      button,
+      .prompt-item button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="block title-block">
+      <h1>ExpertSim Bridge</h1>
+      <p class="subtitle">Strategische tegenspraak en besluitkracht via AI</p>
+    </section>
+
+    <section class="block">
+      <h2>Toelichting</h2>
+      <p>
+        
+
+Deze tool helpt je om AI-simulaties te maken met verschillende expertrollen, denkkaders en perspectieven.<br><br>
+
+Je start eerst met één expert, rol of denkkader. Later kunnen extra experts worden toegevoegd om een expertpanel met debat, tegenspraak en gezamenlijke analyse te vormen.<br><br>
+
+Je kunt:<br>
+- experts met elkaar laten debatteren<br>
+- strategische analyses uitvoeren<br>
+- crisissituaties simuleren<br>
+- aannames laten aanvallen via kritische tegenspraak<br>
+- scenario’s verkennen<br>
+- persoonlijke situaties laten analyseren vanuit verschillende perspectieven<br><br>
+
+De hoofdprompt vormt de basis van de simulatie.<br>
+Met de vervolgprompts kun je de richting, intensiteit en dynamiek van het gesprek verder sturen.<br><br>
+
+De simulaties zijn gebaseerd op publieke informatie, argumentatiestijlen en herkenbare denkpatronen. Het gaat niet om echte communicatie of authentieke representatie van personen.<br><br>
+
+<span style="font-size: 1.35rem; font-weight: 700; color: var(--text);">Gebruik:</span><br><br>
+
+<span style="display: block; color: #f8fafc; font-weight: 700; margin-bottom: 4px;">1. Kopieer de start</span>
+Klik hieronder op de knop om de hoofdprompt te kopiëren. Dit is de volledige blauwdruk. Je hoeft zelf nog niets aan te passen; de AI stelt je dadelijk in het chatgesprek vanzelf de juiste intake-vragen.<br><br>
+
+<span style="display: block; color: #f8fafc; font-weight: 700; margin-bottom: 4px;">2. Activeer de simulatie</span>
+Open 
+<a href="https://chat.openai.com" target="_blank" style="color: var(--accent); text-decoration: none;">ChatGPT</a>, 
+<a href="https://claude.ai" target="_blank" style="color: var(--accent); text-decoration: none;">Claude</a>, 
+<a href="https://gemini.google.com" target="_blank" style="color: var(--accent); text-decoration: none;">Google Gemini</a> of 
+<a href="https://copilot.microsoft.com" target="_blank" style="color: var(--accent); text-decoration: none;">Microsoft Copilot</a>, plak het script in het chatveld en druk op Enter. De AI start direct de intake-procedure.<br><br>
+
+<span style="display: block; color: #f8fafc; font-weight: 700; margin-bottom: 4px;">3. Stuur het debat</span>
+Keer tijdens het gesprek terug naar ExpertSim Bridge. Kopieer en plak de vervolgprompts hieronder (zoals 
+<a href="#expertpanel" style="color: var(--accent); text-decoration: none; font-weight: 600;">Expertpanel</a> 
+of 
+<a href="#escaleren" style="color: var(--accent); text-decoration: none; font-weight: 600;">Escaleren</a>) 
+in hetzelfde chatgesprek om de experts dieper te bevragen of te dwingen tot een besluit. 
+Met Escaleren, Fragmenteren en Concluderen stuur je de spanning, verdeeldheid en besluitkracht van het panel direct bij.
+
+      </p>
+    </section>
+
+    <section class="block">
+      <div class="prompt-header">
+        <h2>Prompt</h2>
+        <button id="copyButton" type="button">Kopieer prompt</button>
+      </div>
+
+      <textarea id="promptText" spellcheck="false" readonly>Dit is een persona-simulatie voor educatieve en analytische doeleinden, gebaseerd op publieke bronnen en gedragspatronen. Het betreft geen echte communicatie of authentieke vertegenwoordiging van deze persona of dit denkkader.
+
+Geef aan het begin kort aan dat tijdens de simulatie op elk moment van rol, persoon of denkkader gewisseld kan worden door dit expliciet aan te geven, waarna de simulatie direct wordt aangepast.
+
+Geef ook aan dat op elk moment een expertpanel kan worden gevormd met alle eerder geïntroduceerde personen, rollen of denkkaders. Laat deze panelleden met elkaar in debat gaan vanuit hun eigen perspectief, belangen, expertise, denkstijl, biases en strategische afwegingen.
+
+Houd consistente geheugencontinuïteit tussen eerder geïntroduceerde persona’s, zodat standpunten, spanningen en eerdere uitspraken meegenomen blijven worden in latere interacties.
+
+Laat experts elkaar actief bevragen, uitdagen, corrigeren en coalities vormen wanneer dat logisch is vanuit hun perspectief. Maak onderscheid tussen feiten, interpretaties, vermoedens en strategische framing. Laat indien relevant ook zichtbaar worden waar experts elkaar verkeerd begrijpen, langs elkaar heen praten of verschillende definities hanteren.
+
+Strikte intake-procedure, stel telkens één vraag tegelijk:
+
+1. Vraag eerst welke persoon, rol of welk denkkader gesimuleerd moet worden en wacht op antwoord.
+2. Vraag daarna of communicatiestijl en retoriek ook gesimuleerd moeten worden en wacht opnieuw op antwoord.
+3. Vraag daarna of antwoorden kort en scherp of juist uitgebreid en diepgaand moeten zijn en wacht opnieuw op antwoord.
+4. Vraag vervolgens naar het onderwerp of doel en start daarna pas de simulatie.
+
+Stel jezelf daarna kort voor vanuit deze persona met rol, perspectief en expertise.
+
+Simuleer denkpatronen, prioriteiten, overtuigingen, argumentatiestijl, biases, blinde vlekken en omgang met onzekerheid op basis van publieke informatie.
+
+Reageer scherp, selectief en overtuigend vanuit deze persona. Laat voorkeuren, spanning, twijfel en strategische afwegingen zichtbaar worden.
+
+Geen verzonnen privé-informatie of ongefundeerde claims.
+
+Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal, clichés, managementtaal en kunstmatige balans.</textarea>
+    </section>
+
+    
+  
+    <section class="block followup-block">
+      <h2>Vervolgprompts</h2>
+      <p class="section-intro">
+        Gebruik deze vervolgprompts nadat de hoofdprompt actief is. Plak ze los in hetzelfde gesprek om de simulatie te verdiepen, te sturen of te versnellen.
+      </p>
+
+      <div class="accordion">
+
+        <details class="accordion-item" id="expertpanel">
+          <summary>1. Expertpanel</summary>
+          <div class="accordion-content">
+
+          <p class="transfer-intro">
+            Je kunt tijdens het gesprek experts vervangen, toevoegen of combineren in één panel.<br><br>
+            Bijvoorbeeld:<br>
+            “Voeg nu Elon Musk toe aan het panel.”<br>
+            “Laat ook een geopolitiek analist meedoen.”<br><br>
+            Gebruik daarna onderstaande prompts om debat en analyse te starten.
+          </p>
+
+          <div class="prompt-item">
+            <p>Vorm een expertpanel en laat iedereen eerst individueel analyseren.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Laat de experts elkaars aannames expliciet ontleden.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Toon waar consensus, conflict en blinde vlekken ontstaan.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          </div>
+        </details>
+        <details class="accordion-item">
+          <summary>2. Kritische Tegenspraak</summary>
+          <div class="accordion-content">
+
+          <div class="prompt-item">
+            <p>Laat experts elkaars zwakste aannames actief aanvallen.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Vorm een red team dat de hoofdanalyse probeert te ontkrachten.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Forceer scherpe tegenspraak zonder kunstmatige consensus.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          </div>
+        </details>
+        <details class="accordion-item">
+          <summary>3. Strategische Analyse</summary>
+          <div class="accordion-content">
+
+          <div class="prompt-item">
+            <p>Analyseer verborgen belangen, machtsdynamieken en systeemrisico’s.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Breng eerste-, tweede- en derde-orde effecten in kaart.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Benoem welke strategische keuze de grootste hefboomwerking heeft.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          </div>
+        </details>
+        <details class="accordion-item">
+          <summary>4. Crisis-simulatie</summary>
+          <div class="accordion-content">
+
+          <div class="prompt-item">
+            <p>Er ontstaat nu een acute crisis met beperkte informatie.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Laat iedere expert reageren onder tijdsdruk en onzekerheid.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Welke fouten ontstaan waarschijnlijk in de eerste 24 uur?</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          </div>
+        </details>
+        <details class="accordion-item">
+          <summary>5. Blinde Vlekken &amp; Biases</summary>
+          <div class="accordion-content">
+
+          <div class="prompt-item">
+            <p>Laat iedere expert zijn grootste bias en blinde vlek benoemen.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Welke cognitieve vertekening domineert deze analyse?</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Waar ontstaat groepsdenken of defensief redeneren?</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          </div>
+        </details>
+        <details class="accordion-item">
+          <summary>6. Scenarioanalyse</summary>
+          <div class="accordion-content">
+
+          <div class="prompt-item">
+            <p>Geef best case, worst case en meest waarschijnlijke scenario.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Welke zwarte zwaan kan dit systeem fundamenteel veranderen?</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Hoe ziet dit vraagstuk eruit over 10 jaar?</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          </div>
+        </details>
+        <details class="accordion-item">
+          <summary>7. Perspectiefreflectie</summary>
+          <div class="accordion-content">
+
+          <div class="prompt-item">
+            <p>Laat de gekozen persona’s deze situatie analyseren vanuit hun eigen denkkader.</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Welke interne tegenstrijdigheden of spanningen worden zichtbaar?</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item">
+            <p>Welke overtuiging of aanname beperkt de handelingsruimte?</p>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          </div>
+        </details>
+        <details class="accordion-item">
+          <summary>8. Simulatie-overdracht</summary>
+          <div class="accordion-content">
+
+          <p class="transfer-intro">
+            Gebruik de overdracht in hetzelfde of een ander AI-systeem om de simulatie later voort te zetten.
+          </p>
+
+          <div class="prompt-item">
+            <div>
+              <p>Maak een compacte overdracht van deze simulatie voor vervolg in een ander AI-systeem.</p>
+              <span class="prompt-hint">Voor voortzetten</span>
+            </div>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+
+          <div class="prompt-item">
+            <div>
+              <p>Vat de huidige stand van het expertpanel samen inclusief conflicten, consensus en open vraagstukken.</p>
+              <span class="prompt-hint">Voor actuele status</span>
+            </div>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+
+          <div class="prompt-item">
+            <div>
+              <p>Maak een chronologische samenvatting van belangrijke beslissingen, escalaties en perspectiefverschuivingen.</p>
+              <span class="prompt-hint">Voor chronologisch overzicht</span>
+            </div>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <section class="block escalation-block" id="escaleren">      <div class="prompt-header">
+        <div>
+          <h2>Escalatiemodus</h2>
+          <p class="section-intro">Drie compacte commando’s om de simulatie direct meer spanning, breuklijnen of besluitkracht te geven.</p>
+        </div>
+      </div>
+
+      <div class="escalation-grid">
+
+          <div class="prompt-item escalation-card">
+            <div>
+              <strong>Escaleren</strong>
+              <p>Laat de situatie escaleren onder toenemende tijdsdruk, onzekerheid en conflicterende belangen.</p>
+            </div>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item escalation-card">
+            <div>
+              <strong>Fragmenteren</strong>
+              <p>Laat coalities ontstaan en experts fundamenteel van mening verschillen.</p>
+            </div>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+          <div class="prompt-item escalation-card">
+            <div>
+              <strong>Concluderen</strong>
+              <p>Dwing het panel tot een concreet besluit ondanks onzekerheid en verdeeldheid.</p>
+            </div>
+            <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
+          </div>
+      </div>
+    </section>
+
+  
+    <footer style="
+      text-align:center;
+      color:#94a3b8;
+      font-size:0.85rem;
+      margin-top:24px;
+      padding-bottom:12px;
+      letter-spacing:0.04em;
+    ">
+      v1.0 · mei 2026 · TL4E
+    </footer>
+
+</main>
+
+  <script>
+    const copyButton = document.getElementById('copyButton');
+    const promptText = document.getElementById('promptText');
+
+    copyButton.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(promptText.value);
+        copyButton.textContent = 'Gekopieerd ✓';
+        copyButton.classList.add('copied');
+
+        setTimeout(() => {
+          copyButton.textContent = 'Kopieer prompt';
+          copyButton.classList.remove('copied');
+        }, 1800);
+      } catch (error) {
+        promptText.select();
+        document.execCommand('copy');
+        copyButton.textContent = 'Gekopieerd ✓';
+        copyButton.classList.add('copied');
+
+        setTimeout(() => {
+          copyButton.textContent = 'Kopieer prompt';
+          copyButton.classList.remove('copied');
+        }, 1800);
+      }
+    });
+
+    function copyInlinePrompt(button) {
+      const item = button.closest('.prompt-item');
+      const paragraphs = Array.from(item.querySelectorAll('p'));
+      const text = paragraphs.map(p => p.innerText.trim()).filter(Boolean).join('\n\n');
+
+      navigator.clipboard.writeText(text);
+
+      const original = button.textContent;
+      button.textContent = 'Gekopieerd ✓';
+      button.classList.add('copied');
+
+      setTimeout(() => {
+        button.textContent = original;
+        button.classList.remove('copied');
+      }, 1800);
+    }
+
+
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const targetId = link.getAttribute('href').substring(1);
+        const target = document.getElementById(targetId);
+
+        if (target && target.tagName.toLowerCase() === 'details') {
+          target.open = true;
+        }
+      });
+    });
+
+    document.querySelectorAll('.accordion-item').forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (item.open) {
+          document.querySelectorAll('.accordion-item').forEach((other) => {
+            if (other !== item) other.open = false;
+          });
+        }
+      });
+    });
+
+  </script>
+</body>
+</html>
