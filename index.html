@@ -245,6 +245,86 @@
       background: rgba(30, 41, 59, 0.72);
     }
 
+
+
+    .prompt-details {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(2, 6, 23, 0.28);
+      overflow: hidden;
+    }
+
+    .prompt-details summary {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      list-style: none;
+    }
+
+    .prompt-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .prompt-summary-text {
+      display: grid;
+      gap: 4px;
+    }
+
+    .prompt-summary-title {
+      color: #f8fafc;
+      font-weight: 700;
+      font-size: 1.08rem;
+    }
+
+    .prompt-summary-subtitle {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .prompt-summary-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .prompt-summary-actions button {
+      position: relative;
+      z-index: 2;
+    }
+
+    .toggle-indicator {
+      color: var(--accent);
+      font-size: 1.45rem;
+      font-weight: 700;
+      line-height: 1;
+      min-width: 1.2em;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .prompt-details[open] .toggle-indicator::after {
+      content: "−";
+    }
+
+    .prompt-details:not([open]) .toggle-indicator::after {
+      content: "+";
+    }
+
+    .prompt-body {
+      padding: 0 18px 18px;
+    }
+
+    .prompt-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 14px;
+    }
+
     @media (max-width: 640px) {
       body {
         padding: 24px 12px;
@@ -265,6 +345,24 @@
       button,
       .prompt-item button {
         width: 100%;
+      }
+
+      .prompt-details summary {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .prompt-summary-actions {
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .prompt-summary-actions button {
+        width: auto;
+      }
+
+      .prompt-actions {
+        justify-content: stretch;
       }
     }
   </style>
@@ -322,10 +420,19 @@ Met Escaleren, Fragmenteren en Concluderen stuur je de spanning, verdeeldheid en
     </section>
 
     <section class="block">
-      <div class="prompt-header">
-        <h2>Prompt</h2>
-        <button id="copyButton" type="button">Kopieer prompt</button>
-      </div>
+      <h2>Hoofdprompt</h2>
+      <details class="prompt-details" id="hoofdprompt">
+        <summary>
+          <span class="prompt-summary-text">
+            <span class="prompt-summary-title">Volledige promptblauwdruk</span>
+            <span class="prompt-summary-subtitle">Bekijk de tekst wanneer nodig, of kopieer direct de volledige hoofdprompt.</span>
+          </span>
+          <span class="prompt-summary-actions">
+            <button id="copyButton" type="button">Kopieer prompt</button>
+            <span class="toggle-indicator" aria-hidden="true"></span>
+          </span>
+        </summary>
+        <div class="prompt-body">
 
       <textarea id="promptText" spellcheck="false" readonly>Dit is een persona-simulatie voor educatieve en analytische doeleinden, gebaseerd op publieke bronnen en gedragspatronen. Het betreft geen echte communicatie of authentieke vertegenwoordiging van deze persona of dit denkkader.
 
@@ -353,6 +460,8 @@ Reageer scherp, selectief en overtuigend vanuit deze persona. Laat voorkeuren, s
 Geen verzonnen privé-informatie of ongefundeerde claims.
 
 Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal, clichés, managementtaal en kunstmatige balans.</textarea>
+        </div>
+      </details>
     </section>
 
     
@@ -579,7 +688,7 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
       padding-bottom:12px;
       letter-spacing:0.04em;
     ">
-      v1.0 · mei 2026 · TL4E
+      v1.3 · mei 2026 · TL4E
     </footer>
 
 </main>
@@ -588,7 +697,9 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
     const copyButton = document.getElementById('copyButton');
     const promptText = document.getElementById('promptText');
 
-    copyButton.addEventListener('click', async () => {
+    copyButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       try {
         await navigator.clipboard.writeText(promptText.value);
         copyButton.textContent = 'Gekopieerd ✓';
