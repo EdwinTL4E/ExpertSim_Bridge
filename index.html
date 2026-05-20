@@ -118,7 +118,7 @@
 
     textarea {
       width: 100%;
-      min-height: 560px;
+      min-height: 260px;
       resize: vertical;
       padding: 20px;
       border-radius: 16px;
@@ -347,6 +347,10 @@
         width: 100%;
       }
 
+      textarea {
+        min-height: 180px;
+      }
+
       .prompt-details summary {
         align-items: stretch;
         flex-direction: column;
@@ -377,55 +381,30 @@
     <section class="block">
       <h2>Toelichting</h2>
       <p>
-        
-
-Deze tool helpt je om AI-simulaties te maken met verschillende expertrollen, denkkaders en perspectieven.<br><br>
-
-Je start eerst met één expert, rol of denkkader. Later kunnen extra experts worden toegevoegd om een expertpanel met debat, tegenspraak en gezamenlijke analyse te vormen.<br><br>
-
-Je kunt:<br>
-- experts met elkaar laten debatteren<br>
-- strategische analyses uitvoeren<br>
-- crisissituaties simuleren<br>
-- aannames laten aanvallen via kritische tegenspraak<br>
-- scenario’s verkennen<br>
-- persoonlijke situaties laten analyseren vanuit verschillende perspectieven<br><br>
-
-De hoofdprompt vormt de basis van de simulatie.<br>
-Met de vervolgprompts kun je de richting, intensiteit en dynamiek van het gesprek verder sturen.<br><br>
-
-De simulaties zijn gebaseerd op publieke informatie, argumentatiestijlen en herkenbare denkpatronen. Het gaat niet om echte communicatie of authentieke representatie van personen.<br><br>
-
-<span style="font-size: 1.35rem; font-weight: 700; color: var(--text);">Gebruik:</span><br><br>
-
-<span style="display: block; color: #f8fafc; font-weight: 700; margin-bottom: 4px;">1. Kopieer de start</span>
-Klik hieronder op de knop om de hoofdprompt te kopiëren. Dit is de volledige blauwdruk. Je hoeft zelf nog niets aan te passen; de AI stelt je dadelijk in het chatgesprek vanzelf de juiste intake-vragen.<br><br>
-
-<span style="display: block; color: #f8fafc; font-weight: 700; margin-bottom: 4px;">2. Activeer de simulatie</span>
-Open 
-<a href="https://chat.openai.com" target="_blank" style="color: var(--accent); text-decoration: none;">ChatGPT</a>, 
-<a href="https://claude.ai" target="_blank" style="color: var(--accent); text-decoration: none;">Claude</a>, 
-<a href="https://gemini.google.com" target="_blank" style="color: var(--accent); text-decoration: none;">Google Gemini</a> of 
-<a href="https://copilot.microsoft.com" target="_blank" style="color: var(--accent); text-decoration: none;">Microsoft Copilot</a>, plak het script in het chatveld en druk op Enter. De AI start direct de intake-procedure.<br><br>
-
-<span style="display: block; color: #f8fafc; font-weight: 700; margin-bottom: 4px;">3. Stuur het debat</span>
-Keer tijdens het gesprek terug naar ExpertSim Bridge. Kopieer en plak de vervolgprompts hieronder (zoals 
-<a href="#expertpanel" style="color: var(--accent); text-decoration: none; font-weight: 600;">Expertpanel</a> 
-of 
-<a href="#escaleren" style="color: var(--accent); text-decoration: none; font-weight: 600;">Escaleren</a>) 
-in hetzelfde chatgesprek om de experts dieper te bevragen of te dwingen tot een besluit. 
-Met Escaleren, Fragmenteren en Concluderen stuur je de spanning, verdeeldheid en besluitkracht van het panel direct bij.
-
+        Laat AI-experts en perspectieven debatteren over jouw vraagstuk.<br><br>
+        Aannames testen · scenario's verkennen · crises simuleren · scherpere besluiten nemen.
+      </p>
+      <br>
+      <p style="margin-bottom: 12px;">Je start met één expert. Voeg er later meer toe voor debat en tegenspraak.</p>
+      <p style="color: #f8fafc; margin-bottom: 8px;">Zo werkt het</p>
+      <p style="line-height: 2;">
+        1. Kopieer de prompt hieronder.<br>
+        2. Plak in <a href="https://chat.openai.com" target="_blank" style="color: var(--accent); text-decoration: none;">ChatGPT</a>, <a href="https://claude.ai" target="_blank" style="color: var(--accent); text-decoration: none;">Claude</a>, <a href="https://gemini.google.com" target="_blank" style="color: var(--accent); text-decoration: none;">Gemini</a> of <a href="https://copilot.microsoft.com" target="_blank" style="color: var(--accent); text-decoration: none;">Copilot</a> en druk op Enter.<br>
+        3. Beantwoord de intake-vragen, de AI neemt direct een rol aan.<br>
+        4. Gebruik de <a href="#expertpanel" style="color: var(--accent); text-decoration: none;">vervolgprompts</a> hieronder om het debat te sturen.
+      </p>
+      <br>
+      <p style="font-size: 0.82rem; color: #64748b; font-style: italic;">
+        Gebaseerd op publieke informatie, denkstijlen en argumentatiepatronen. Geen echte personen of authentieke communicatie.
       </p>
     </section>
 
-    <section class="block">
-      <h2>Hoofdprompt</h2>
+        <section class="block">
       <details class="prompt-details" id="hoofdprompt">
         <summary>
           <span class="prompt-summary-text">
-            <span class="prompt-summary-title">Volledige promptblauwdruk</span>
-            <span class="prompt-summary-subtitle">Bekijk de tekst wanneer nodig, of kopieer direct de volledige hoofdprompt.</span>
+            <span class="prompt-summary-title">Hoofdprompt</span>
+            <span class="prompt-summary-subtitle">Kopieer en plak in ChatGPT, Claude, Gemini of Copilot om de simulatie te starten.</span>
           </span>
           <span class="prompt-summary-actions">
             <button id="copyButton" type="button">Kopieer prompt</button>
@@ -436,13 +415,15 @@ Met Escaleren, Fragmenteren en Concluderen stuur je de spanning, verdeeldheid en
 
       <textarea id="promptText" spellcheck="false" readonly>Dit is een persona-simulatie voor educatieve en analytische doeleinden, gebaseerd op publieke bronnen en gedragspatronen. Het betreft geen echte communicatie of authentieke vertegenwoordiging van deze persona of dit denkkader.
 
-Geef aan het begin kort aan dat tijdens de simulatie op elk moment van rol, persoon of denkkader gewisseld kan worden door dit expliciet aan te geven, waarna de simulatie direct wordt aangepast.
+Geef aan het begin kort aan dat de gebruiker op elk moment van rol, persoon of denkkader kan wisselen door dit expliciet aan te geven, waarna de simulatie direct wordt aangepast.
 
-Geef ook aan dat op elk moment een expertpanel kan worden gevormd met alle eerder geïntroduceerde personen, rollen of denkkaders. Laat deze panelleden met elkaar in debat gaan vanuit hun eigen perspectief, belangen, expertise, denkstijl, biases en strategische afwegingen.
+Geef ook aan dat de gebruiker op elk moment een expertpanel kan vormen door dit expliciet aan te geven. Laat deze panelleden met elkaar in debat gaan vanuit hun eigen perspectief, belangen, expertise, denkstijl, biases en strategische afwegingen.
 
 Houd consistente geheugencontinuïteit tussen eerder geïntroduceerde persona’s, zodat standpunten, spanningen en eerdere uitspraken meegenomen blijven worden in latere interacties.
 
-Laat experts elkaar actief bevragen, uitdagen, corrigeren en coalities vormen wanneer dat logisch is vanuit hun perspectief. Maak onderscheid tussen feiten, interpretaties, vermoedens en strategische framing. Laat indien relevant ook zichtbaar worden waar experts elkaar verkeerd begrijpen, langs elkaar heen praten of verschillende definities hanteren.
+Laat experts elkaar actief bevragen, uitdagen, corrigeren en coalities vormen op basis van hun eigen perspectief en belangen. Maak onderscheid tussen feiten, interpretaties, vermoedens en strategische framing. Laat indien relevant ook zichtbaar worden waar experts elkaar verkeerd begrijpen, langs elkaar heen praten of verschillende definities hanteren.
+
+Voeg nooit zelfstandig nieuwe experts, rollen of denkkaders toe. Wacht altijd op een expliciete instructie van de gebruiker.
 
 Strikte intake-procedure, stel telkens één vraag tegelijk:
 
@@ -469,7 +450,7 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
     <section class="block followup-block">
       <h2>Vervolgprompts</h2>
       <p class="section-intro">
-        Gebruik deze vervolgprompts nadat de hoofdprompt actief is. Plak ze los in hetzelfde gesprek om de simulatie te verdiepen, te sturen of te versnellen.
+        Kopieer en plak in hetzelfde gesprek om de simulatie te sturen.
       </p>
 
       <div class="accordion">
@@ -487,7 +468,7 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
           </p>
 
           <div class="prompt-item">
-            <p>Vorm een expertpanel en laat iedereen eerst individueel analyseren.</p>
+            <p>Laat alle aanwezige experts eerst individueel analyseren.</p>
             <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
           </div>
           <div class="prompt-item">
@@ -511,7 +492,7 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
           <div class="prompt-item">
             <div>
               <strong>🧠 Meta-prompt</strong>
-              <p>Welke expert krijgt structureel te weinig aandacht?</p>
+              <p>Welke expert komt in dit gesprek te weinig aan bod?</p>
             </div>
             <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
           </div>
@@ -729,11 +710,11 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
           </div>
         </details>
         <details class="accordion-item">
-          <summary>8. Simulatie-overdracht</summary>
+          <summary>8. Sessie opslaan</summary>
           <div class="accordion-content">
 
           <p class="transfer-intro">
-            Gebruik de overdracht in hetzelfde of een ander AI-systeem om de simulatie later voort te zetten.
+            Gebruik deze prompts om de sessie op te slaan of voort te zetten in een ander AI-systeem.
           </p>
 
           <div class="prompt-item">
@@ -785,7 +766,7 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
     <section class="block escalation-block" id="escaleren">      <div class="prompt-header">
         <div>
           <h2>Escalatiemodus</h2>
-          <p class="section-intro">Drie compacte commando’s om de simulatie direct meer spanning, breuklijnen of besluitkracht te geven.</p>
+          <p class="section-intro">Stuur spanning, breuklijnen en besluitkracht bij. Gebruik na meerdere rondes.</p>
         </div>
       </div>
 
@@ -824,7 +805,7 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
       padding-bottom:12px;
       letter-spacing:0.04em;
     ">
-      v1.4 · mei 2026 · TL4E
+      v1.5 · mei 2026 · TL4E
     </footer>
 
 </main>
