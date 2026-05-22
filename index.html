@@ -369,13 +369,51 @@
         justify-content: stretch;
       }
     }
+
+    .btn-about {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      min-width: unset;
+      padding: 8px 18px;
+      font-weight: 500;
+      font-size: 0.88rem;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .btn-about:hover {
+      color: var(--text);
+      border-color: rgba(148, 163, 184, 0.5);
+      filter: none;
+      transform: none;
+    }
   </style>
 </head>
 <body>
   <main>
     <section class="block title-block">
-      <h1>ExpertSim Bridge</h1>
-      <p class="subtitle">Strategische tegenspraak en besluitkracht via AI</p>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+        <div>
+          <h1>ExpertSim Bridge</h1>
+          <p class="subtitle" style="margin:10px 0 0;">Strategische tegenspraak en besluitkracht via AI</p>
+        </div>
+        <button id="aboutButton" type="button" class="btn-about">About</button>
+      </div>
+
+      <div id="aboutBox" style="display:none;margin-top:24px;padding:22px;border-radius:18px;border:1px solid var(--border);background:#020617;color:#dbeafe;line-height:1.75;text-align:left;">
+        <h2 style="margin-top:0;color:#f8fafc;">Wat is ExpertSim Bridge?</h2>
+        <p style="color:#dbeafe;margin:0 0 14px;">ExpertSim Bridge laat je complexe vraagstukken analyseren via gesimuleerde experts, denkers en perspectieven.</p>
+        <p style="color:#dbeafe;margin:0 0 14px;">Verken tegengestelde standpunten, test aannames en ontdek blinde vlekken, via een debat tussen AI-experts die redeneren vanuit hun eigen logica, belangen en stijl.</p>
+        <p style="color:#dbeafe;margin:0 0 14px;">Gebruik experts ook als analytisch filter: leg een actueel vraagstuk voor aan een specifiek denkkader en genereer scherpe inzichten vanuit die logica.</p>
+        <p style="color:#dbeafe;margin:0 0 6px;">Bijvoorbeeld:</p>
+        <p style="color:#dbeafe;margin:0 0 4px;">• Wat zou een geopolitiek analist zeggen over de energietransitie?</p>
+        <p style="color:#dbeafe;margin:0 0 4px;">• Hoe zou een gedragswetenschapper AI-adoptie in organisaties benaderen?</p>
+        <p style="color:#dbeafe;margin:0 0 14px;">• Wat zou een crisismanager adviseren in de eerste 24 uur van een datalek?</p>
+        <p style="color:#dbeafe;margin:0 0 14px;">Werkt met AI-diensten zoals ChatGPT, Claude, Gemini en Copilot.</p>
+        <p style="color:#dbeafe;margin:0 0 4px;">Geen installatie.</p>
+        <p style="color:#dbeafe;margin:0 0 4px;">Geen technische kennis nodig.</p>
+        <p style="color:#dbeafe;margin:0;">Direct te gebruiken.</p>
+      </div>
     </section>
 
     <section class="block">
@@ -427,7 +465,7 @@ Voeg nooit zelfstandig nieuwe experts, rollen of denkkaders toe. Wacht altijd op
 
 Strikte intake-procedure, stel telkens één vraag tegelijk:
 
-1. Vraag eerst welke persoon, rol of welk denkkader gesimuleerd moet worden en wacht op antwoord.
+1. Vraag eerst welke persoon, rol of denkkader gesimuleerd moet worden, of geef aan of je direct met een expertpanel wilt starten, en wacht op antwoord. Geef hierbij 5 voorbeelden, waaronder een gedragswetenschapper (bestaande NL expert), een expertpanel geopolitiek (bestaande NL experts) en een expertpanel AI Prompt Engineering (bestaande experts).
 2. Vraag daarna of communicatiestijl en retoriek ook gesimuleerd moeten worden en wacht opnieuw op antwoord.
 3. Vraag daarna of antwoorden kort en scherp of juist uitgebreid en diepgaand moeten zijn en wacht opnieuw op antwoord.
 4. Vraag vervolgens naar het onderwerp of doel en start daarna pas de simulatie.
@@ -719,8 +757,8 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
 
           <div class="prompt-item">
             <div>
-              <p>Maak een compacte overdracht van deze simulatie voor vervolg in een ander AI-systeem.</p>
-              <span class="prompt-hint">Voor voortzetten</span>
+              <p>Maak een compacte overdracht voor vervolg in een ander AI-systeem. Beschrijf per expert: naam, rol, kernstandpunten, argumentatiestijl, biases en ingenomen posities in dit gesprek. Voeg daaraan toe: de huidige stand van discussie, openstaande conflicten en de volgende logische stap.</p>
+              <span class="prompt-hint">Kopieer de uitvoer en plak als eerste bericht in een ander AI-systeem om de simulatie voort te zetten.</span>
             </div>
             <button type="button" onclick="copyInlinePrompt(this)">Kopieer</button>
           </div>
@@ -856,6 +894,14 @@ Schrijf compact, direct en menselijk. Hoge informatiedichtheid. Vermijd AI-taal,
       }, 1800);
     }
 
+
+    const aboutButton = document.getElementById('aboutButton');
+    const aboutBox = document.getElementById('aboutBox');
+    aboutButton.addEventListener('click', () => {
+      const hidden = aboutBox.style.display === 'none';
+      aboutBox.style.display = hidden ? 'block' : 'none';
+      aboutButton.textContent = hidden ? 'Close' : 'About';
+    });
 
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
       link.addEventListener('click', (event) => {
